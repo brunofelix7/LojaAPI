@@ -43,6 +43,23 @@ namespace LojaAPI.Controllers {
             return response;
         }
 
+        //  Diz que os meus ids vem do meu URI (endpoint ou da url)
+        //  Rota customizada
+        [Route("api/carrinho/{carrinho_id}/produto/{produto_id}")]
+        public HttpResponseMessage Delete([FromUri] int carrinho_id, [FromUri] int produto_id) {
+            CarrinhoDAO dao = new CarrinhoDAO();
+            Carrinho carrinho = dao.busca(carrinho_id);
+            carrinho.remove(produto_id);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
 
+        //  Eu recebo um Produto no corpo da minha requisição
+        [Route("api/carrinho/{carrinho_id}/produto/{produto_id}")]
+        public HttpResponseMessage Put([FromBody] Produto produto, [FromUri] int carrinho_id, [FromUri] int produto_id) {
+            var dao = new CarrinhoDAO();
+            var carrinho = dao.busca(carrinho_id);
+            carrinho.troca(produto);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }
